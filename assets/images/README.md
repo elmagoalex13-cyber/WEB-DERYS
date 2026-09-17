@@ -1,13 +1,33 @@
 # Rutas de imagenes
 
-Cada imagen tiene ahora su propia ruta. Para cambiar una foto, sustituye el archivo correspondiente manteniendo el mismo nombre:
+La web acepta archivos sin extension y estos formatos para cada imagen:
 
-- `assets/images/home-avatar.jpg`: foto circular de la home.
-- `assets/images/hero.jpg`: foto grande superior de `links.html`.
-- `assets/images/onlyfans.jpg`: imagen de la tarjeta principal de OnlyFans.
-- `assets/images/twitter.jpg`: imagen de la tarjeta de Twitter/X.
-- `assets/images/instagram.jpg`: imagen de la tarjeta de Instagram.
+- sin extension, por ejemplo `home-avatar`
+- `.jpg`
+- `.jpeg`
+- `.png`
+- `.webp`
+- `.avif`
+- `.gif`
+- `.svg`
 
-Tambien queda `assets/images/avatar.jpg` como copia base/original por si quieres conservarla.
+Mantén el nombre base y cambia solo la extensión. Por ejemplo, para la imagen de Twitter puedes usar cualquiera de estos:
 
-Si cambias el nombre de algun archivo, actualiza el `src` correspondiente en `index.html` o `links.html`.
+- `assets/images/twitter`
+- `assets/images/twitter.jpg`
+- `assets/images/twitter.jpeg`
+- `assets/images/twitter.png`
+- `assets/images/twitter.webp`
+
+Nombres base que usa la web:
+
+- `home-avatar`: foto circular de la home.
+- `hero`: foto grande superior de `links.html`.
+- `onlyfans`: imagen de la tarjeta principal de OnlyFans.
+- `twitter`: imagen de la tarjeta de Twitter/X.
+- `instagram`: imagen de la tarjeta de Instagram.
+- `onlyfans-logo`: logo de OnlyFans.
+
+La web probará automáticamente las extensiones disponibles. Si existen varias con el mismo nombre base, usa la primera en este orden: sin extension, `jpg`, `jpeg`, `png`, `webp`, `avif`, `gif`, `svg`.
+
+Recomendacion: aunque la web acepta archivos sin extension, para subirla a hosting es mas fiable usar extension (`.jpg`, `.png`, `.webp`, etc.).

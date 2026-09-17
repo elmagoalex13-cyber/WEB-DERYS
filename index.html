@@ -67,7 +67,7 @@ body::before { content: ''; position: fixed; top: 0; left: 50%; transform: trans
     <div class="avatar-ring"></div>
     <div class="avatar-ring-solid"></div>
     <div class="avatar">
-      <img src="./assets/images/home-avatar.jpg" alt="Rachel Sweet content creator +18">
+      <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src-base="./assets/images/home-avatar" data-src-exts="jpg,jpeg,png,webp,avif,gif" alt="Rachel Sweet content creator +18">
     </div>
     <div class="avatar-badge"><div class="badge-dot"></div>+18</div>
   </div>
@@ -90,5 +90,29 @@ body::before { content: ''; position: fixed; top: 0; left: 50%; transform: trans
     <p>Content Creator - Contenido exclusivo para adultos</p>
   </div>
 </div>
+<script>
+(function(){
+  var VERSION=Date.now().toString();
+  var EXTENSIONS=['jpg','jpeg','png','webp','avif','gif','svg',''];
+  document.querySelectorAll('img[data-src-base]').forEach(function(img){
+    var base=img.getAttribute('data-src-base');
+    var index=0;
+    var tried={};
+    tried[img.getAttribute('src')]=true;
+    function tryNext(){
+      while(index<EXTENSIONS.length){
+        var extension=EXTENSIONS[index++].trim();
+        var nextSrc=base+(extension?'.'+extension:'')+'?v='+VERSION;
+        if(tried[nextSrc])continue;
+        tried[nextSrc]=true;
+        img.src=nextSrc;
+        return;
+      }
+    }
+    img.addEventListener('error',tryNext);
+    tryNext();
+  });
+})();
+</script>
 </body>
 </html>

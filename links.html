@@ -49,15 +49,9 @@ body::before { content: ''; position: fixed; inset: 0; background: radial-gradie
 .of-img-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: 40% 20%; display: block; transition: transform .45s ease; }
 .of-card:hover .of-img-wrap img { transform: scale(1.05); }
 .of-img-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 30%, rgba(26,24,20,.88) 100%); }
-.of-img-badge { position: absolute; top: 14px; left: 14px; display: flex; align-items: center; gap: 6px; background: rgba(12,11,9,.7); border: 1px solid var(--border-gold); border-radius: 50px; padding: 5px 12px; backdrop-filter: blur(8px); }
-.of-img-badge svg { width: 13px; height: 13px; }
-.of-img-badge-text { font-size: .58rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--champagne); }
-.of-img-title { position: absolute; bottom: 14px; left: 18px; right: 18px; font-family: 'Cormorant', serif; font-size: 1.6rem; font-weight: 600; color: var(--white); line-height: 1.1; }
-.of-body { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px 18px; gap: 14px; }
-.of-body-desc { font-size: .75rem; color: var(--text2); line-height: 1.5; }
-.of-cta-btn { flex-shrink: 0; display: inline-flex; align-items: center; gap: 8px; background: var(--champagne); color: #0c0b09; border-radius: 50px; padding: 13px 22px; font-size: .7rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; text-decoration: none; transition: background .2s, transform .15s; }
-.of-card:hover .of-cta-btn { background: var(--champ-lt); transform: scale(1.04); }
-.of-cta-btn svg { width: 13px; height: 13px; }
+.of-img-badge { position: absolute; top: 14px; left: 14px; display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; }
+.of-img-badge img { width: 30px; height: 30px; display: block; filter: drop-shadow(0 2px 8px rgba(0,0,0,.65)); }
+.of-img-title { position: absolute; bottom: 22px; left: 18px; right: 18px; font-size: 1rem; color: #ffffff; line-height: 1.35; font-weight: 800; letter-spacing: .08em; text-align: center; text-transform: uppercase; text-shadow: 0 2px 12px rgba(0,0,0,.9), 0 0 12px rgba(255,255,255,.32); }
 .grid-cards { width: calc(100% - 40px); display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; animation: up .6s .44s ease both; opacity: 0; animation-fill-mode: both; }
 .grid-card { display: block; text-decoration: none; border-radius: 16px; overflow: hidden; position: relative; border: 1px solid var(--border); background: var(--card); transition: transform .2s ease, border-color .2s, box-shadow .2s; }
 .grid-card:hover { transform: translateY(-4px); border-color: var(--border-gold); box-shadow: 0 12px 32px rgba(212,185,140,.1); }
@@ -109,7 +103,7 @@ body::before { content: ''; position: fixed; inset: 0; background: radial-gradie
 <div class="page">
 
   <div class="hero">
-    <img class="hero-img" src="./assets/images/hero.jpg" alt="Rachel Sweet content creator +18">
+    <img class="hero-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src-base="./assets/images/hero" data-src-exts="jpg,jpeg,png,webp,avif,gif" alt="Rachel Sweet content creator +18">
     <div class="hero-vignette"></div>
     <div class="hero-bottom">
       <div class="hero-pill"><div class="pulse"></div>Contenido exclusivo +18</div>
@@ -127,24 +121,12 @@ body::before { content: ''; position: fixed; inset: 0; background: radial-gradie
   <div class="sec-label">Todo mi contenido</div>
   <a href="https://onlyfans.com/dedeelatingirl" target="_blank" rel="noopener" class="of-card" data-track="onlyfans">
     <div class="of-img-wrap">
-      <img src="./assets/images/onlyfans.jpg" alt="Rachel Sweet contenido exclusivo OnlyFans">
+      <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src-base="./assets/images/onlyfans" data-src-exts="jpg,jpeg,png,webp,avif,gif" alt="Rachel Sweet contenido exclusivo OnlyFans">
       <div class="of-img-overlay"></div>
       <div class="of-img-badge">
-        <svg viewBox="0 0 24 24" fill="var(--champagne)" aria-hidden="true">
-          <path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm0 4a6 6 0 110 12A6 6 0 0112 6zm0 2a4 4 0 100 8 4 4 0 000-8z"/>
-        </svg>
-        <span class="of-img-badge-text">OnlyFans</span>
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src-base="./assets/images/onlyfans-logo" data-src-exts="svg,png,webp,jpg,jpeg,avif,gif" alt="OnlyFans">
       </div>
-      <div class="of-img-title">Fotos - Videos<br>Contenido exclusivo</div>
-    </div>
-    <div class="of-body">
-      <div class="of-body-desc">Accede a todo mi contenido privado,<br>fotos exclusivas y mensajes privados.</div>
-      <div class="of-cta-btn">
-        Suscribirse
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
-        </svg>
-      </div>
+      <div class="of-img-title">Escríbeme aquí 👇</div>
     </div>
   </a>
 
@@ -153,7 +135,7 @@ body::before { content: ''; position: fixed; inset: 0; background: radial-gradie
 
     <a href="https://x.com/raachelsweet" target="_blank" rel="noopener" class="grid-card" data-track="twitter" onclick="window.open('https://x.com/raachelsweet','_blank','noopener'); return false;">
       <div class="grid-img-wrap">
-        <img src="./assets/images/twitter.jpg" alt="Rachel Sweet Twitter X" style="object-position: 60% top;">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src-base="./assets/images/twitter" data-src-exts="jpg,jpeg,png,webp,avif,gif" alt="Rachel Sweet Twitter X" style="object-position: 60% top;">
         <div class="grid-img-overlay"></div>
         <div class="grid-platform-icon">
           <svg viewBox="0 0 24 24" fill="var(--x-white)" aria-hidden="true">
@@ -170,7 +152,7 @@ body::before { content: ''; position: fixed; inset: 0; background: radial-gradie
 
     <a href="https://www.instagram.com/raachel.sweet/" target="_blank" rel="noopener" class="grid-card" data-track="instagram">
       <div class="grid-img-wrap">
-        <img src="./assets/images/instagram.jpg" alt="Rachel Sweet Instagram" style="object-position: center 15%;">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src-base="./assets/images/instagram" data-src-exts="jpg,jpeg,png,webp,avif,gif" alt="Rachel Sweet Instagram" style="object-position: center 15%;">
         <div class="grid-img-overlay"></div>
         <div class="grid-platform-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -212,5 +194,30 @@ body::before { content: ''; position: fixed; inset: 0; background: radial-gradie
   </div>
 
 </div>
+<script>
+(function(){
+  var VERSION=Date.now().toString();
+  var DEFAULT_EXTENSIONS=['jpg','jpeg','png','webp','avif','gif','svg',''];
+  document.querySelectorAll('img[data-src-base]').forEach(function(img){
+    var base=img.getAttribute('data-src-base');
+    var extensions=(img.getAttribute('data-src-exts')||DEFAULT_EXTENSIONS.join(',')).split(',');
+    var index=0;
+    var tried={};
+    tried[img.getAttribute('src')]=true;
+    function tryNext(){
+      while(index<extensions.length){
+        var extension=extensions[index++].trim();
+        var nextSrc=base+(extension?'.'+extension:'')+'?v='+VERSION;
+        if(tried[nextSrc])continue;
+        tried[nextSrc]=true;
+        img.src=nextSrc;
+        return;
+      }
+    }
+    img.addEventListener('error',tryNext);
+    tryNext();
+  });
+})();
+</script>
 </body>
 </html>
