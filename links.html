@@ -86,17 +86,6 @@ body::before { content: ''; position: fixed; inset: 0; background: radial-gradie
   .grid-card-name{font-size:1rem}
 }
 </style>
-<!-- ContentHub Analytics -->
-<script>
-(function(){
-  var SLUG='rachel-sweet-redes';
-  var sid=sessionStorage.getItem('_ch_sid')||Math.random().toString(36).slice(2)+Date.now().toString(36);
-  sessionStorage.setItem('_ch_sid',sid);
-  function send(p){fetch('https://social.agenciaonlyfans.es/api/track',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)}).catch(function(){});}
-  send({creatorSlug:SLUG,eventType:'pageview',referrer:document.referrer,sessionId:sid});
-  document.addEventListener('click',function(e){var el=e.target.closest('[data-track]');if(!el)return;send({creatorSlug:SLUG,eventType:'click',label:el.getAttribute('data-track'),referrer:document.referrer,sessionId:sid});});
-})();
-</script>
 </head>
 <body>
 <div class="page">
@@ -117,7 +106,7 @@ body::before { content: ''; position: fixed; inset: 0; background: radial-gradie
   </div>
 
   <div class="sec-label">Todo mi contenido exclusivo</div>
-  <a href="https://onlyfans.com/dedeelatingirl" target="_blank" rel="noopener" class="of-card" data-track="onlyfans">
+  <a href="https://onlyfans.com/dedeelatingirl" target="_blank" rel="noopener" class="of-card" data-halo-of-click="onlyfans_card">
     <div class="of-img-wrap">
       <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src-base="./assets/images/onlyfans" data-src-exts="jpg,jpeg,png,webp,avif,gif" alt="Rachel Sweet contenido exclusivo OnlyFans">
       <div class="of-img-overlay"></div>
@@ -131,7 +120,7 @@ body::before { content: ''; position: fixed; inset: 0; background: radial-gradie
   <div class="sec-label" style="margin-top:24px;">Encuentrame aqui</div>
   <div class="grid-cards">
 
-    <a href="https://x.com/raachelsweet" target="_blank" rel="noopener" class="grid-card" data-track="twitter" onclick="window.open('https://x.com/raachelsweet','_blank','noopener'); return false;">
+    <a href="https://x.com/raachelsweet" target="_blank" rel="noopener" class="grid-card" onclick="window.open('https://x.com/raachelsweet','_blank','noopener'); return false;">
       <div class="grid-img-wrap">
         <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src-base="./assets/images/twitter" data-src-exts="jpg,jpeg,png,webp,avif,gif" alt="Rachel Sweet Twitter X" style="object-position: 60% top;">
         <div class="grid-img-overlay"></div>
@@ -147,7 +136,7 @@ body::before { content: ''; position: fixed; inset: 0; background: radial-gradie
       </div>
     </a>
 
-    <a href="https://www.instagram.com/raachel.sweet/" target="_blank" rel="noopener" class="grid-card" data-track="instagram">
+    <a href="https://www.instagram.com/raachel.sweet/" target="_blank" rel="noopener" class="grid-card">
       <div class="grid-img-wrap">
         <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src-base="./assets/images/instagram" data-src-exts="jpg,jpeg,png,webp,avif,gif" alt="Rachel Sweet Instagram" style="object-position: center 15%;">
         <div class="grid-img-overlay"></div>
@@ -176,7 +165,7 @@ body::before { content: ''; position: fixed; inset: 0; background: radial-gradie
 
   <div class="cta-wrap">
     <div class="cta-label">Unete ahora - Solo para mayores de 18</div>
-    <a href="https://onlyfans.com/dedeelatingirl" target="_blank" rel="noopener" class="cta-btn" data-track="onlyfans_cta">
+    <a href="https://onlyfans.com/dedeelatingirl" target="_blank" rel="noopener" class="cta-btn" data-halo-of-click="onlyfans_cta">
       <span>Ver todo mi contenido en OnlyFans</span>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -190,6 +179,64 @@ body::before { content: ''; position: fixed; inset: 0; background: radial-gradie
   </div>
 
 </div>
+<script>
+(function(){
+  var HALO_ENDPOINT='https://halo-panel.vercel.app/api/landing-track';
+  var HALO_LANDING_SLUG='rachel-sweet';
+  var HALO_LANDING_KEY='lk_rachel_sweet_cambia_esto';
+  var SESSION_KEY='halo_landing_session_rachel_sweet';
+
+  function getSessionId(){
+    try{
+      var id=localStorage.getItem(SESSION_KEY);
+      if(!id){
+        id=(crypto.randomUUID&&crypto.randomUUID())||(Math.random().toString(36).slice(2)+Date.now().toString(36));
+        localStorage.setItem(SESSION_KEY,id);
+      }
+      return id;
+    }catch(e){
+      return Math.random().toString(36).slice(2)+Date.now().toString(36);
+    }
+  }
+
+  function trackHaloLanding(eventType,extra){
+    var payload=JSON.stringify(Object.assign({
+      landingSlug:HALO_LANDING_SLUG,
+      landingKey:HALO_LANDING_KEY,
+      eventType:eventType,
+      sessionId:getSessionId(),
+      referrer:document.referrer,
+      page:location.pathname,
+      url:location.href,
+      userAgent:navigator.userAgent,
+      timestamp:new Date().toISOString()
+    },extra||{}));
+
+    if(navigator.sendBeacon){
+      navigator.sendBeacon(HALO_ENDPOINT,new Blob([payload],{type:'application/json'}));
+      return;
+    }
+
+    fetch(HALO_ENDPOINT,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      keepalive:true,
+      body:payload
+    }).catch(function(){});
+  }
+
+  trackHaloLanding('pageview');
+
+  document.querySelectorAll('[data-halo-of-click]').forEach(function(element){
+    element.addEventListener('click',function(){
+      trackHaloLanding('click',{
+        label:element.getAttribute('data-halo-of-click')||'onlyfans',
+        destination:element.href||'onlyfans'
+      });
+    });
+  });
+})();
+</script>
 <script>
 (function(){
   var VERSION=Date.now().toString();
