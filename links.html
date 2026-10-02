@@ -25,7 +25,7 @@ body { overflow-x: hidden; }
 .hero-social svg { width: 15px; height: 15px; }
 .main { padding: 12px 12px 24px; }
 .prompt { display: flex; justify-content: center; align-items: center; gap: 6px; min-height: 38px; margin: 0 auto 8px; font-size: .86rem; font-weight: 800; color: #fff; text-align: center; }
-.of-card { display: block; position: relative; overflow: hidden; width: 100%; aspect-ratio: 4 / 2.38; border-radius: 11px; background: #151515; color: #fff; text-decoration: none; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); touch-action: manipulation; }
+.of-card { display: block; position: relative; overflow: hidden; width: 100%; aspect-ratio: 4 / 2.38; border: 0; border-radius: 11px; padding: 0; background: #151515; color: #fff; font: inherit; text-align: inherit; text-decoration: none; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); appearance: none; cursor: pointer; touch-action: manipulation; }
 .of-card img { width: 100%; height: 100%; object-fit: cover; object-position: 42% 22%; display: block; transition: transform .28s ease; }
 .of-card:hover img { transform: scale(1.025); }
 .of-card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,.02) 32%, rgba(0,0,0,.72) 100%); pointer-events: none; }
@@ -93,13 +93,13 @@ body { overflow-x: hidden; }
   <main class="main">
     <div class="prompt">Hablamos? <span aria-hidden="true">🧸 ↓</span></div>
 
-    <a href="https://onlyfans.com/dedeelatingirl/c2" target="_blank" rel="noopener" class="of-card" data-halo-of-click="onlyfans" aria-label="Abrir OnlyFans de Rachel Sweet">
+    <button type="button" class="of-card" data-of-launch data-halo-of-click="onlyfans" aria-label="Abrir OnlyFans de Rachel Sweet">
       <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src-base="./assets/images/onlyfans" data-src-exts="jpg,jpeg,png,webp,avif,gif" alt="Rachel Sweet contenido exclusivo OnlyFans">
       <div class="of-logo">
         <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src-base="./assets/images/onlyfans-logo" data-src-exts="svg,png,webp,jpg,jpeg,avif,gif" alt="">
       </div>
       <div class="of-title">Habla conmigo 💕</div>
-    </a>
+    </button>
 
     <div class="social-links" aria-label="Redes sociales">
       <a href="https://x.com/raachelsweet" target="_blank" rel="noopener" class="social-card">
@@ -172,6 +172,7 @@ body { overflow-x: hidden; }
     }).catch(function(){});
   }
 
+  window.trackHaloLanding=trackHaloLanding;
   trackHaloLanding('pageview');
 
   document.addEventListener('click', function(event){
@@ -190,6 +191,151 @@ body { overflow-x: hidden; }
       destination: href
     });
   }, true);
+})();
+</script>
+<script>
+(function(){
+  var OF_PARTS=["c3B0dGg=","bm8vLzo=","bmFmeWw=","bW9jLnM=","ZWRlZC8=","aXRhbGU=","bHJpZ24=","MmMv"];
+  var schemes={
+    igExt:["instagram:","//","extbrowser/?url="].join(""),
+    thExt:["barcelona:","//","extbrowser/?url="].join(""),
+    safari:["x-","safari-"].join(""),
+    chrome:["googlechrome","s://"].join(""),
+    edge:["microsoft-","edge-https://"].join(""),
+    brave:["brave:","//open-url?url="].join(""),
+    firefox:["firefox:","//open-url?url="].join(""),
+    intent:["intent:","//"].join("")
+  };
+  var pending=false;
+  var timers=[];
+
+  function decodeTarget(parts){
+    try{
+      return (parts||[]).map(function(part){
+        return decodeURIComponent(escape(atob(part))).split("").reverse().join("");
+      }).join("");
+    }catch(error){
+      return "";
+    }
+  }
+
+  function userAgent(){
+    return navigator.userAgent||"";
+  }
+
+  function inAppBrowser(){
+    var ua=userAgent();
+    if(/Barcelona/i.test(ua))return "threads";
+    if(/FBAN|FBAV|FB_IAB/i.test(ua))return "facebook";
+    if(/Instagram/i.test(ua))return "instagram";
+    return null;
+  }
+
+  function os(){
+    var ua=userAgent();
+    if(/iPhone|iPad|iPod/i.test(ua))return "ios";
+    if(/Android/i.test(ua))return "android";
+    return "other";
+  }
+
+  function clearTimers(){
+    timers.forEach(function(timer){ clearTimeout(timer); });
+    timers=[];
+  }
+
+  function later(delay,url){
+    timers.push(setTimeout(function(){
+      if(document.visibilityState==="visible"){
+        try{ window.location.href=url; }catch(error){}
+      }
+    },delay));
+  }
+
+  function openExternalIOS(url,source){
+    var parsed=null;
+    try{ parsed=new URL(url); }catch(error){}
+    var host=parsed?parsed.host:"";
+    var path=parsed?(parsed.pathname+parsed.search+parsed.hash):"";
+
+    if(source==="instagram"){
+      try{ window.location.href=schemes.igExt+encodeURIComponent(url); }catch(error){}
+      later(300,schemes.safari+url);
+    }else if(source==="threads"){
+      try{ window.location.href=schemes.thExt+encodeURIComponent(url); }catch(error){}
+      later(300,schemes.safari+url);
+    }else{
+      try{ window.location.href=schemes.safari+url; }catch(error){}
+    }
+
+    if(host){
+      later(600,schemes.chrome+host+path);
+      later(900,schemes.edge+host+path);
+    }
+    later(1200,schemes.brave+encodeURIComponent(url));
+    later(1500,schemes.firefox+encodeURIComponent(url));
+    timers.push(setTimeout(function(){
+      pending=false;
+      if(document.visibilityState==="visible"){
+        try{ window.location.href=url; }catch(error){}
+      }
+    },1800));
+  }
+
+  function openExternalAndroid(url){
+    var clean=url.replace(/^https?:\/\//,"");
+    try{ window.location.href=schemes.intent+clean+"#Intent;scheme=https;end"; }catch(error){}
+    timers.push(setTimeout(function(){
+      pending=false;
+      if(document.visibilityState==="visible"){
+        try{ window.location.href=url; }catch(error){}
+      }
+    },1500));
+  }
+
+  function openTarget(url){
+    if(!/^https?:\/\//i.test(url))url="https://"+url;
+    var source=inAppBrowser();
+    var platform=os();
+
+    if(source&&platform==="ios"&&!/iPhone OS (1[1-6])_/.test(userAgent())){
+      if(pending)return;
+      pending=true;
+      clearTimers();
+      openExternalIOS(url,source);
+      return;
+    }
+
+    if(source&&platform==="android"){
+      if(pending)return;
+      pending=true;
+      clearTimers();
+      openExternalAndroid(url);
+      return;
+    }
+
+    if(!window.open(url,"_blank","noopener")){
+      setTimeout(function(){ window.location.href=url; },120);
+    }
+  }
+
+  document.addEventListener("visibilitychange",function(){
+    if(document.visibilityState==="visible"){
+      clearTimers();
+      pending=false;
+    }
+  });
+
+  document.addEventListener("click",function(event){
+    var button=event.target.closest&&event.target.closest("[data-of-launch]");
+    if(!button)return;
+    event.preventDefault();
+    var target=decodeTarget(OF_PARTS);
+    if(!target)return;
+    if(window.trackHaloLanding){
+      window.trackHaloLanding("click",{label:"onlyfans",destination:target});
+    }
+    openTarget(target);
+  },true);
 })();
 </script>
 <script>
