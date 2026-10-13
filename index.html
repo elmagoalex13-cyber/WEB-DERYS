@@ -44,6 +44,19 @@ body { overflow-x: hidden; }
 .social-icon { position: absolute; top: 10px; left: 10px; z-index: 2; width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; background: rgba(0,0,0,.32); color: #fff; backdrop-filter: blur(6px); }
 .social-icon svg { width: 15px; height: 15px; }
 .social-title { position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 2; text-align: center; font-size: .92rem; line-height: 1.1; font-weight: 900; text-shadow: 0 2px 16px rgba(0,0,0,.9); }
+.modal-lock { overflow: hidden; }
+.age-gate, .manual-open { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 18px; background: rgba(0,0,0,.86); backdrop-filter: blur(12px); }
+.age-gate[hidden], .manual-open[hidden] { display: none; }
+.gate-box, .manual-box { width: min(100%, 390px); border: 1px solid rgba(236,72,153,.34); border-radius: 18px; padding: 22px; background: linear-gradient(180deg, rgba(24,24,27,.96), rgba(0,0,0,.96)); color: #fff; box-shadow: 0 24px 70px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.04); text-align: center; }
+.gate-kicker, .manual-kicker { display: inline-flex; align-items: center; justify-content: center; min-height: 28px; margin-bottom: 12px; padding: 0 12px; border-radius: 999px; background: rgba(236,72,153,.14); color: #f9a8d4; font-size: .68rem; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
+.gate-title, .manual-title { font-size: clamp(1.45rem, 8vw, 2rem); line-height: 1; font-weight: 900; letter-spacing: -.03em; }
+.gate-text, .manual-text { margin-top: 10px; color: rgba(255,255,255,.74); font-size: .94rem; line-height: 1.45; }
+.gate-actions, .manual-actions { display: grid; gap: 10px; margin-top: 18px; }
+.gate-confirm, .manual-copy, .manual-continue { min-height: 48px; border: 0; border-radius: 13px; background: #ec4899; color: #fff; font: inherit; font-size: .9rem; font-weight: 900; cursor: pointer; }
+.manual-continue { background: #fff; color: #090909; }
+.gate-exit { display: inline-flex; align-items: center; justify-content: center; min-height: 42px; border-radius: 12px; color: rgba(255,255,255,.66); font-size: .84rem; font-weight: 800; text-decoration: none; }
+.debug-panel { position: fixed; left: 10px; right: 10px; bottom: 10px; z-index: 15; max-width: 440px; margin: 0 auto; border: 1px solid rgba(236,72,153,.32); border-radius: 12px; padding: 10px 12px; background: rgba(0,0,0,.86); color: #fff; font: 12px/1.45 ui-monospace, SFMono-Regular, Consolas, monospace; white-space: pre-wrap; box-shadow: 0 16px 40px rgba(0,0,0,.4); }
+.debug-panel[hidden] { display: none; }
 @keyframes up { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 .hero, .prompt, .of-card, .social-links { animation: up .45s ease both; }
 .prompt { animation-delay: .08s; }
@@ -64,6 +77,32 @@ body { overflow-x: hidden; }
 </style>
 </head>
 <body>
+<div class="age-gate" id="age-gate" role="dialog" aria-modal="true" aria-labelledby="age-title" aria-describedby="age-text" hidden>
+  <div class="gate-box">
+    <div class="gate-kicker">+18</div>
+    <h1 class="gate-title" id="age-title">Solo para mayores de edad</h1>
+    <p class="gate-text" id="age-text">Esta pagina puede incluir contenido para adultos. Confirma que eres mayor de 18 anos para continuar.</p>
+    <div class="gate-actions">
+      <button type="button" class="gate-confirm" id="age-confirm">Soy mayor de 18</button>
+      <a class="gate-exit" href="https://www.google.com" rel="nofollow">Salir</a>
+    </div>
+  </div>
+</div>
+
+<div class="manual-open" id="manual-open" role="dialog" aria-modal="true" aria-labelledby="manual-title" aria-describedby="manual-text" hidden>
+  <div class="manual-box">
+    <div class="manual-kicker">Abrir enlace</div>
+    <h2 class="manual-title" id="manual-title">Abre en tu navegador</h2>
+    <p class="manual-text" id="manual-text">Toca &middot;&middot;&middot; arriba a la derecha y elige Abrir en el navegador. Tambien puedes copiar el enlace o seguir aqui.</p>
+    <div class="manual-actions">
+      <button type="button" class="manual-copy" id="manual-copy">Copiar enlace</button>
+      <button type="button" class="manual-continue" id="manual-continue">Seguir aqui</button>
+    </div>
+  </div>
+</div>
+
+<div class="debug-panel" id="debug-panel" hidden></div>
+
 <div class="page">
   <div class="hero">
     <img class="hero-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src-base="./assets/images/hero" data-src-exts="jpg,jpeg,png,webp,avif,gif" alt="Rachel Sweet content creator +18">
@@ -77,7 +116,7 @@ body { overflow-x: hidden; }
         </svg>
       </div>
       <div class="hero-socials" aria-label="Redes sociales de Rachel Sweet">
-        <a href="https://www.instagram.com/bbyraachel/" target="_blank" rel="noopener" class="hero-social" aria-label="Instagram">
+        <a href="https://www.instagram.com/itsrachelsweet/" target="_blank" rel="noopener" class="hero-social" aria-label="Instagram">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <rect x="3" y="3" width="18" height="18" rx="5"/>
             <circle cx="12" cy="12" r="4"/>
@@ -114,7 +153,7 @@ body { overflow-x: hidden; }
         </span>
         <span class="social-title">Twitter/X</span>
       </a>
-      <a href="https://www.instagram.com/bbyraachel/" target="_blank" rel="noopener" class="social-card">
+      <a href="https://www.instagram.com/itsrachelsweet/" target="_blank" rel="noopener" class="social-card">
         <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src-base="./assets/images/instagram" data-src-exts="jpg,jpeg,png,webp,avif,gif" alt="Rachel Sweet Instagram">
         <span class="social-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -129,6 +168,41 @@ body { overflow-x: hidden; }
 
   </main>
 </div>
+<script>
+(function(){
+  var KEY='rachel_sweet_age_confirmed';
+  var gate=document.getElementById('age-gate');
+  var button=document.getElementById('age-confirm');
+  if(!gate||!button)return;
+
+  function isConfirmed(){
+    try{ return sessionStorage.getItem(KEY)==='1'; }
+    catch(error){ return false; }
+  }
+
+  function setConfirmed(){
+    try{ sessionStorage.setItem(KEY,'1'); }
+    catch(error){}
+  }
+
+  function openGate(){
+    gate.hidden=false;
+    document.documentElement.classList.add('modal-lock');
+    document.body.classList.add('modal-lock');
+    setTimeout(function(){ button.focus(); },0);
+  }
+
+  function closeGate(){
+    setConfirmed();
+    gate.hidden=true;
+    document.documentElement.classList.remove('modal-lock');
+    document.body.classList.remove('modal-lock');
+  }
+
+  button.addEventListener('click',closeGate);
+  if(!isConfirmed())openGate();
+})();
+</script>
 <script>
 (function(){
   var HALO_ENDPOINT='https://halo-panel.vercel.app/api/landing-track';
@@ -175,7 +249,11 @@ body { overflow-x: hidden; }
     }).catch(function(){});
   }
 
-  window.trackHaloLanding=trackHaloLanding;
+  document.addEventListener('halo-track',function(event){
+    var detail=event&&event.detail||{};
+    trackHaloLanding(detail.eventType||'click',detail.extra||{});
+  });
+  try{ window.trackHaloLanding=trackHaloLanding; }catch(error){}
   trackHaloLanding('pageview');
 
   document.addEventListener('click', function(event){
@@ -199,18 +277,11 @@ body { overflow-x: hidden; }
 <script>
 (function(){
   var OF_PARTS=["c3B0dGg=","bm8vLzo=","bmFmeWw=","bW9jLnM=","ZWRlZC8=","aXRhbGU=","bHJpZ24=","MmMv"];
-  var schemes={
-    igExt:["instagram:","//","extbrowser/?url="].join(""),
-    thExt:["barcelona:","//","extbrowser/?url="].join(""),
-    safari:["x-","safari-"].join(""),
-    chrome:["googlechrome","s://"].join(""),
-    edge:["microsoft-","edge-https://"].join(""),
-    brave:["brave:","//open-url?url="].join(""),
-    firefox:["firefox:","//open-url?url="].join(""),
-    intent:["intent:","//"].join("")
-  };
   var pending=false;
-  var timers=[];
+  var fallbackTimer=null;
+  var driftTimer=null;
+  var lastTick=0;
+  var currentTarget="";
 
   function decodeTarget(parts){
     try{
@@ -226,107 +297,178 @@ body { overflow-x: hidden; }
     return navigator.userAgent||"";
   }
 
-  function inAppBrowser(){
-    var ua=userAgent();
+  function detectApp(ua){
+    ua=ua||"";
+    if(/musical_ly|BytedanceWebview|TikTok/i.test(ua))return "tiktok";
     if(/Barcelona/i.test(ua))return "threads";
-    if(/FBAN|FBAV|FB_IAB/i.test(ua))return "facebook";
     if(/Instagram/i.test(ua))return "instagram";
-    return null;
+    if(/FBAN|FBAV|FB_IAB|FBIOS|FB4A/i.test(ua))return "facebook";
+    if(/WhatsApp/i.test(ua))return "whatsapp";
+    if(/Twitter|X\/|TwitterAndroid|Twitter for iPhone/i.test(ua))return "x";
+    if(/Telegram/i.test(ua))return "telegram";
+    if(/LinkedInApp|LinkedIn/i.test(ua))return "linkedin";
+    return "normal";
   }
 
-  function os(){
-    var ua=userAgent();
+  function detectOS(ua){
+    ua=ua||"";
     if(/iPhone|iPad|iPod/i.test(ua))return "ios";
     if(/Android/i.test(ua))return "android";
     return "other";
   }
 
-  function clearTimers(){
-    timers.forEach(function(timer){ clearTimeout(timer); });
-    timers=[];
+  function buildAndroidIntent(url){
+    var parsed;
+    try{ parsed=new URL(url); }
+    catch(error){ return url; }
+    return "intent://"+parsed.host+parsed.pathname+parsed.search+parsed.hash+
+      "#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url="+
+      encodeURIComponent(url)+";end";
   }
 
-  function later(delay,url){
-    timers.push(setTimeout(function(){
-      if(document.visibilityState==="visible"){
-        try{ window.location.href=url; }catch(error){}
+  function getLaunchPlan(url,ua){
+    var app=detectApp(ua);
+    var platform=detectOS(ua);
+    var scheme=url;
+    var mode="direct";
+
+    if(platform==="ios"){
+      if(app==="instagram"){
+        mode="ios-external";
+        scheme="instagram://extbrowser/?url="+encodeURIComponent(url);
+      }else if(app==="threads"){
+        mode="ios-external";
+        scheme="barcelona://extbrowser/?url="+encodeURIComponent(url);
+      }else if(app==="tiktok"){
+        mode="manual";
+        scheme="";
+      }else if(app!=="normal"){
+        mode="ios-external";
+        scheme="x-safari-"+url;
       }
-    },delay));
+    }else if(platform==="android"&&app!=="normal"){
+      mode="android-intent";
+      scheme=buildAndroidIntent(url);
+    }
+
+    return {app:app, os:platform, mode:mode, scheme:scheme};
   }
 
-  function openExternalIOS(url,source){
-    var parsed=null;
-    try{ parsed=new URL(url); }catch(error){}
-    var host=parsed?parsed.host:"";
-    var path=parsed?(parsed.pathname+parsed.search+parsed.hash):"";
+  function clearFallbackWatch(){
+    if(fallbackTimer)clearTimeout(fallbackTimer);
+    if(driftTimer)clearInterval(driftTimer);
+    fallbackTimer=null;
+    driftTimer=null;
+    lastTick=0;
+  }
 
-    if(source==="instagram"){
-      try{ window.location.href=schemes.igExt+encodeURIComponent(url); }catch(error){}
-      later(300,schemes.safari+url);
-    }else if(source==="threads"){
-      try{ window.location.href=schemes.thExt+encodeURIComponent(url); }catch(error){}
-      later(300,schemes.safari+url);
-    }else{
-      try{ window.location.href=schemes.safari+url; }catch(error){}
-    }
+  function markLeftApp(){
+    if(!pending)return;
+    pending=false;
+    clearFallbackWatch();
+  }
 
-    if(host){
-      later(600,schemes.chrome+host+path);
-      later(900,schemes.edge+host+path);
+  function showManual(url){
+    var modal=document.getElementById("manual-open");
+    var copy=document.getElementById("manual-copy");
+    var follow=document.getElementById("manual-continue");
+    if(!modal||!copy||!follow)return;
+    currentTarget=url;
+    pending=false;
+    clearFallbackWatch();
+    modal.hidden=false;
+    document.documentElement.classList.add("modal-lock");
+    document.body.classList.add("modal-lock");
+    setTimeout(function(){ copy.focus(); },0);
+  }
+
+  function closeManual(){
+    var modal=document.getElementById("manual-open");
+    if(modal)modal.hidden=true;
+    document.documentElement.classList.remove("modal-lock");
+    document.body.classList.remove("modal-lock");
+  }
+
+  function watchIOSFallback(url){
+    clearFallbackWatch();
+    pending=true;
+    lastTick=Date.now();
+    driftTimer=setInterval(function(){
+      var now=Date.now();
+      if(now-lastTick>900)markLeftApp();
+      lastTick=now;
+    },250);
+    fallbackTimer=setTimeout(function(){
+      if(pending&&document.visibilityState==="visible")showManual(url);
+    },2500);
+  }
+
+  function openExternalIOS(url,plan){
+    if(plan.mode==="manual"){
+      showManual(url);
+      return;
     }
-    later(1200,schemes.brave+encodeURIComponent(url));
-    later(1500,schemes.firefox+encodeURIComponent(url));
-    timers.push(setTimeout(function(){
+    watchIOSFallback(url);
+    try{ window.location.href=plan.scheme; }catch(error){ showManual(url); }
+  }
+
+  function openExternalAndroid(url,plan){
+    pending=true;
+    try{ window.location.href=plan.scheme; }catch(error){}
+    fallbackTimer=setTimeout(function(){
       pending=false;
       if(document.visibilityState==="visible"){
         try{ window.location.href=url; }catch(error){}
       }
-    },1800));
-  }
-
-  function openExternalAndroid(url){
-    var clean=url.replace(/^https?:\/\//,"");
-    try{ window.location.href=schemes.intent+clean+"#Intent;scheme=https;end"; }catch(error){}
-    timers.push(setTimeout(function(){
-      pending=false;
-      if(document.visibilityState==="visible"){
-        try{ window.location.href=url; }catch(error){}
-      }
-    },1500));
+    },1500);
   }
 
   function openTarget(url){
     if(!/^https?:\/\//i.test(url))url="https://"+url;
-    var source=inAppBrowser();
-    var platform=os();
+    var plan=getLaunchPlan(url,userAgent());
 
-    if(source&&platform==="ios"&&!/iPhone OS (1[1-6])_/.test(userAgent())){
-      if(pending)return;
-      pending=true;
-      clearTimers();
-      openExternalIOS(url,source);
+    if(plan.os==="ios"&&plan.mode!=="direct"){
+      openExternalIOS(url,plan);
       return;
     }
 
-    if(source&&platform==="android"){
-      if(pending)return;
-      pending=true;
-      clearTimers();
-      openExternalAndroid(url);
+    if(plan.os==="android"&&plan.mode==="android-intent"){
+      openExternalAndroid(url,plan);
       return;
     }
 
-    if(!window.open(url,"_blank","noopener")){
-      setTimeout(function(){ window.location.href=url; },120);
-    }
+    window.location.href=url;
   }
 
   document.addEventListener("visibilitychange",function(){
-    if(document.visibilityState==="visible"){
-      clearTimers();
-      pending=false;
-    }
+    if(document.hidden)markLeftApp();
   });
+  window.addEventListener("pagehide",markLeftApp);
+  window.addEventListener("blur",markLeftApp);
+
+  var manualCopy=document.getElementById("manual-copy");
+  var manualContinue=document.getElementById("manual-continue");
+  if(manualCopy){
+    manualCopy.addEventListener("click",function(){
+      if(!currentTarget)return;
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(currentTarget).then(function(){
+          manualCopy.textContent="Enlace copiado";
+        }).catch(function(){
+          manualCopy.textContent=currentTarget;
+        });
+      }else{
+        manualCopy.textContent=currentTarget;
+      }
+    });
+  }
+  if(manualContinue){
+    manualContinue.addEventListener("click",function(){
+      if(!currentTarget)return;
+      closeManual();
+      window.location.href=currentTarget;
+    });
+  }
 
   document.addEventListener("click",function(event){
     var button=event.target.closest&&event.target.closest("[data-of-launch]");
@@ -334,11 +476,28 @@ body { overflow-x: hidden; }
     event.preventDefault();
     var target=decodeTarget(OF_PARTS);
     if(!target)return;
-    if(window.trackHaloLanding){
-      window.trackHaloLanding("click",{label:"onlyfans",destination:target});
-    }
+    document.dispatchEvent(new CustomEvent("halo-track",{detail:{eventType:"click",extra:{label:"onlyfans",destination:target}}}));
     openTarget(target);
   },true);
+
+  var params=new URLSearchParams(window.location.search);
+  if(params.get("debug")==="1"){
+    var target=decodeTarget(OF_PARTS);
+    var plan=getLaunchPlan(target,userAgent());
+    var panel=document.getElementById("debug-panel");
+    if(panel){
+      panel.hidden=false;
+      panel.textContent=[
+        "debug=1",
+        "app: "+plan.app,
+        "os: "+plan.os,
+        "mode: "+plan.mode,
+        "scheme: "+(plan.scheme||"manual instructions")
+      ].join("\n");
+    }
+  }
+
+  window.__rachelDeeplink={detectApp:detectApp,detectOS:detectOS,getLaunchPlan:getLaunchPlan,buildAndroidIntent:buildAndroidIntent};
 })();
 </script>
 <script>
